@@ -187,7 +187,7 @@ def Takecommand():
     r=sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening....")
-        r.pause_threshold=2 #im using this to say that while i give command and in that span if i pause for 2 seconds then do not complete the phrase and take that as a command
+        r.pause_threshold=1 #im using this to say that while i give command and in that span if i pause for 2 seconds then do not complete the phrase and take that as a command
         audio=r.listen(source)
         try:#here we are recongnizing the speech that we collected using listen method
             print("Recognizing....")
@@ -224,11 +224,15 @@ def display_mytasks(mytaskslist):
         num=num+1
 
     return
-
+def setup_db():
+    mydb = mysql.connector.connect(host="localhost", user="root", passwd="10mother#_mysql", database="one")
+    mycursor = mydb.cursor()
+    return (mydb,mycursor)
 if __name__ == '__main__':
     engine = pyttsx3.init('sapi5')#sapi5 is microsoft speeech API
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
+    print("yippee")
     speak("HelLo Madiha!!what do you want me to do??")
     hour=int(dt.datetime.now().hour)
     minutes=int(dt.datetime.now().minute)
@@ -255,9 +259,10 @@ if __name__ == '__main__':
                 strTime=dt.datetime.now().strftime("%H hours %M minutes and %S seconds")
                 speak(f"it is {strTime}")
             elif 'open pycharm' in query:
-                pycharm_path="C:\\Program Fil0es\\JetBrains\\PyCharm Community Edition 2020.2.1\\bin\\pycharm64.exe"
+                pycharm_path="C:\\Program Files\\JetBrains\\PyCharm Community Edition 2020.2.1\\bin\\pycharm64.exe"
                 os.startfile(pycharm_path)
             elif 'open zoom' in query:
+
                 zoom_path="C:\\Users\\jahan\\AppData\\Roaming\\Zoom\\bin_00\\Zoom.exe"
                 os.startfile(zoom_path)
             elif 'email to' in query:
@@ -276,8 +281,7 @@ if __name__ == '__main__':
                     speak("sorry!your email wasn't sent, try again in some time")
                     print("sorry!your email wasn't sent, try again in some time")
             elif 'task' in query or 'tasks' in query:
-                mydb=mysql.connector.connect(host="localhost",user="root",passwd="10mother#_mysql",database="one")
-                mycursor=mydb.cursor()
+                (mydb,mycursor)=setup_db()
                 mycursor.execute("select count(name) from tasks")
                 result=mycursor.fetchone()
                 print(result)
