@@ -272,7 +272,7 @@ if __name__ == '__main__':
                 speak("What should be the content")
                 try:
                     content=Takecommand()
-                    to="1nh18cs109.madihasehar@gmail.com"
+                    to="example@gmail.com"
                     #msg=f'Subject:{subject}\n\n{content}'
                     sendEmail(to,content)
                     print("Email has been sent!!")
